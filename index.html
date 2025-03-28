@@ -8,17 +8,16 @@
     <!-- Include A-Frame and AR.js -->
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/aframe-ar@1.7.2/aframe-ar.min.js"></script>
-
 </head>
 <body style="margin: 0; overflow: hidden;">
 
-    <!-- A-Frame Scene for AR.js -->
+    <!-- Create the A-Frame AR Scene -->
     <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
 
-        <!-- Camera for AR -->
-        <a-camera position="0 0 0" look-controls="pointerLockEnabled: true;"></a-camera>
+        <!-- Camera setup for AR -->
+        <a-camera id="camera" position="0 0 0" look-controls="pointerLockEnabled: true;"></a-camera>
 
-        <!-- 3D Model to be displayed -->
+        <!-- 3D Model to Display (Replace with Your Model) -->
         <a-entity 
             gltf-model="https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@master/2.0/BrainStem/glTF-Binary/BrainStem.glb" 
             position="0 0 -2"
@@ -29,15 +28,34 @@
 
     </a-scene>
 
-    <!-- Gesture handling component for interactivity (Zoom and Rotate) -->
     <script>
+        // Camera permission handling
+        function requestCameraAccess() {
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(function(stream) {
+                        console.log("Camera access granted");
+                    })
+                    .catch(function(error) {
+                        console.error("Camera access denied or error occurred: ", error);
+                        alert("Please enable camera access for this site.");
+                    });
+            }
+        }
+
+        // Request camera access when page loads
+        window.onload = function() {
+            requestCameraAccess();
+        }
+
+        // Gesture control for rotation and zoom (Pinch-to-zoom and Rotate)
         AFRAME.registerComponent('gesture-handler', {
             init: function () {
                 let el = this.el;
                 let pinchStartDistance = null;
                 let scale = 1;
 
-                // Pinch zoom functionality
+                // Pinch zoom
                 document.addEventListener('gesturestart', function (event) {
                     pinchStartDistance = event.scale;
                 });
@@ -50,7 +68,7 @@
                     }
                 });
 
-                // Rotate with two-finger touch functionality
+                // Rotate with two-finger touch
                 let rotateStart = null;
                 document.addEventListener('touchstart', function (event) {
                     if (event.touches.length === 2) {
