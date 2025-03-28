@@ -1,17 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Medical AR Model</title>
+    <!-- Load A-Frame and AR.js -->
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://rawgit.com/jeromeetienne/ar.js/1.7.2/aframe/build/aframe-ar.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/jeromeetienne/ar.js@1.7.2/aframe/build/aframe-ar.min.js"></script>
+    <style>
+        body { margin: 0; overflow: hidden; text-align: center; }
+        #info { position: absolute; top: 10px; width: 100%; color: white; background: rgba(0, 0, 0, 0.6); padding: 10px; }
+    </style>
 </head>
-<body style="margin: 0; overflow: hidden;">
+<body>
+    <div id="info">Point your camera at the **Hiro marker** to see the AR model.</div>
+
     <a-scene embedded arjs>
+        <!-- Marker where the 3D model will appear -->
         <a-marker preset="hiro">
-            <a-box position="0 0.5 0" material="color: red;"></a-box>
-            <a-entity gltf-model="url(heart.glb)" position="0 1 -2" scale="0.5 0.5 0.5"></a-entity>
-            <a-animation attribute="rotation" to="360 360 0" dur="5000" repeat="indefinite"></a-animation>
+            <a-entity 
+                gltf-model="https://sketchfab.com/3d-models/beating-heart-d9845afb1ee64ad094adc96320c67d98" 
+                scale="0.5 0.5 0.5" 
+                position="0 0 0"
+                rotation="0 180 0"
+                animation="property: rotation; to: 0 360 0; loop: true; dur: 10000">
+            </a-entity>
         </a-marker>
-        <a-camera position="0 0 0"></a-camera>
+
+        <!-- Camera -->
+        <a-entity camera></a-entity>
     </a-scene>
+
 </body>
 </html>
