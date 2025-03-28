@@ -18,12 +18,15 @@
     <a-scene embedded arjs>
         <!-- Marker where the 3D model will appear -->
         <a-marker type="pattern" url="./pattern-marker.patt" smooth="true">
+            <!-- Heart model with scaling and rotation -->
             <a-entity 
                 gltf-model="./heart.glb" 
-                scale="0.5 0.5 0.5" 
+                scale="2 2 2"  <!-- Make model bigger -->
                 position="0 0 0"
                 rotation="0 180 0"
-                animation="property: rotation; to: 0 360 0; loop: true; dur: 10000">
+                animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"
+                event-set__mouseenter="scale: 2.5 2.5 2.5; color: red"  <!-- Interaction: Enlarge on mouseenter -->
+                event-set__mouseleave="scale: 2 2 2; color: white">  <!-- Interaction: Reset size on mouseleave -->
             </a-entity>
         </a-marker>
 
