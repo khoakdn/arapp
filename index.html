@@ -17,7 +17,7 @@
 
     <a-scene embedded arjs>
         <!-- Use Hiro marker for testing -->
-        <a-marker preset="hiro">
+        <a-marker type="pattern" url="./pattern-marker.patt" smooth="true">
             <!-- Make the model smaller initially to ensure it’s within the camera's view -->
             <a-entity 
                 gltf-model="url(./heart.glb)"  <!-- Use the correct path to your model -->
