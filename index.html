@@ -16,12 +16,11 @@
     <div id="info">Point your camera at the **Hiro marker** to see the AR model.</div>
 
     <a-scene embedded arjs>
-        <!-- Use Hiro marker for testing -->
+        <!-- Marker where the 3D model will appear -->
         <a-marker type="pattern" url="./pattern-marker.patt" smooth="true">
-            <!-- Make the model smaller initially to ensure it’s within the camera's view -->
             <a-entity 
-                gltf-model="url(./heart.glb)"  <!-- Use the correct path to your model -->
-                scale="1 1 1"  <!-- Use a manageable size -->
+                gltf-model="./heart.glb" 
+                scale="2 2 2"  <!-- Increased scale to make the model bigger -->
                 position="0 0 0"
                 rotation="0 180 0"
                 animation="property: rotation; to: 0 360 0; loop: true; dur: 10000">
@@ -33,5 +32,6 @@
                   orbit-controls="auto-rotate: true; enableZoom: true; zoomFactor: 1.5">
         </a-entity>
     </a-scene>
+
 </body>
 </html>
