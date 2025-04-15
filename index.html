@@ -3,14 +3,51 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Medical AR Model</title>
+  <title>Medical AR Model - Interactive</title>
 
   <!-- A-Frame and AR.js -->
   <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.min.js"></script>
 
-  <!-- Optional: Orbit Controls for zoom/rotate on desktop -->
-  <script src="https://cdn.jsdelivr.net/npm/aframe-orbit-controls@1.3.0/dist/aframe-orbit-controls.min.js"></script>
+  <!-- Gesture & Super Hands -->
+  <script src="https://cdn.jsdelivr.net/npm/aframe-gesture-detector@3.3.0/dist/aframe-gesture-detector.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aframe-super-hands-component@4.0.5/dist/aframe-super-hands.min.js"></script>
+
+  <!-- Component for rotation/zoom using gestures -->
+  <script>
+    AFRAME.registerComponent("gesture-handler", {
+      schema: {
+        enabled: { default: true },
+      },
+      init: function () {
+        const el = this.el;
+        this.handleRotation = this.handleRotation.bind(this);
+        this.handleScale = this.handleScale.bind(this);
+
+        el.addEventListener("onefingermove", this.handleRotation);
+        el.addEventListener("twofingermove", this.handleScale);
+      },
+      handleRotation: function (event) {
+        if (!this.data.enabled) return;
+        const rotation = this.el.getAttribute("rotation");
+        this.el.setAttribute("rotation", {
+          x: rotation.x,
+          y: rotation.y + event.detail.positionChange.x * 2,
+          z: rotation.z,
+        });
+      },
+      handleScale: function (event) {
+        if (!this.data.enabled) return;
+        const scale = this.el.getAttribute("scale");
+        const newScale = scale.x + event.detail.spreadChange / 100;
+        this.el.setAttribute("scale", {
+          x: newScale,
+          y: newScale,
+          z: newScale,
+        });
+      }
+    });
+  </script>
 
   <style>
     body { margin: 0; overflow: hidden; }
@@ -28,18 +65,29 @@
   </style>
 </head>
 <body>
-  <div id="info">📱 Point your camera at the <strong>Hiro Marker</strong> to view the heart model</div>
+  <div id="info">📱 Scan the Hiro marker and pinch or swipe to rotate/zoom</div>
 
-  <a-scene embedded arjs="sourceType: webcam;">
+  <a-scene
+    embedded
+    arjs="sourceType: webcam;"
+    gesture-detector
+    vr-mode-ui="enabled: false"
+    renderer="logarithmicDepthBuffer: true;"
+  >
     <!-- Marker (Hiro) -->
     <a-marker preset="hiro">
-      <!-- 3D Heart Model -->
+      <!-- Interactive container -->
       <a-entity
-        gltf-model="heart.glb"
-        scale="2 2 2"
-        position="0 0 0"
+        id="model-container"
         rotation="0 180 0"
-        animation="property: rotation; to: 0 360 0; loop: true; dur: 10000">
+        scale="1.5 1.5 1.5"
+        gesture-handler
+      >
+        <!-- GLB model -->
+        <a-entity
+          gltf-model="brain.glb"
+          position="0 0 0"
+        ></a-entity>
       </a-entity>
     </a-marker>
 
